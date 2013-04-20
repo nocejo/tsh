@@ -41,6 +41,7 @@ use Term::UI;               # Term::ReadLine UI made easy
 # use Term::ReadKey;        # MSWindows?
 
 my $STRING_MSG_TIM  = "Running for ";
+my $STRING_MSG_BYE  = ", bye.";
 
 my $intime = time();                                                  # Record time
 
@@ -49,16 +50,15 @@ my $intime = time();                                                  # Record t
 # -----------------------------------------------------------------------------
 sub goingout {
     use integer;
-    my $msg = shift; my $retval = shift; my $showtime = shift;
+    my $retval = shift; my $showtime = shift;
 
-    print( $msg );
     if ( $showtime == 1 ) {
         $_ = time() - $intime;
         my $s = $_ % 60; $_ /= 60;
         my $m = $_ % 60; $_ /= 60; $m = ($m == 0) ? "" : $m."m " ;
         my $h = $_ % 24; $_ /= 24; $h = ($h == 0) ? "" : $h."h " ;
         my $d = $_;                $d = ($d == 0) ? "" : $d."d " ;
-        print ( $STRING_MSG_TIM.$d.$h.$m.$s."s\n" );
+        print ( $STRING_MSG_TIM.$d.$h.$m.$s."s $STRING_MSG_BYE\n" );
     }
     exit( $retval );
 }
@@ -75,9 +75,10 @@ my $line   = '';
 my $prompt = 'tsh> ';
 while( 1 ) {                                                # forever
     $line = $term->get_reply( prompt => $prompt );          # getting user input (ui)
-    if ( $line  ) { $line =~ s/^\s*//; $line =~ s/\s*$//; } # strip blanks
+    if ( !$line ) { $line = ''; }
+    $line =~ s/^\s*//; $line =~ s/\s*$//;                   # strip blanks
     if ( $line eq 'q' || $line eq 'exit' ) {
-        goingout( "bye. " , 0 , 1 );     # bye
+        goingout( 0 , 1 );     # bye
     }
     system("task $line");
 }   # -------------------------------------------------------------------------- Main Loop
