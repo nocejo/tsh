@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# tsh.pl - perlish fake taskwarrior shell
+# tsh.pl - simulated taskwarrior shell
 #
 # Copyright 2013, Fidel Mato.
 #
@@ -41,7 +41,7 @@ use Term::UI;               # Term::ReadLine UI made easy
 # use Term::ReadKey;        # MSWindows?
 
 my $STRING_MSG_TIM  = "Running for ";
-my $STRING_MSG_BYE  = ", bye.";
+my $STRING_MSG_BYE  = ". Bye.";
 
 my $intime = time();                                                  # Record time
 
@@ -73,12 +73,13 @@ $term->ornaments(0);                 # disable prompt default styling (underline
 
 my $line   = '';
 my $prompt = 'tsh> ';
+print("\n");                                                # blank line
 while( 1 ) {                                                # forever
     $line = $term->get_reply( prompt => $prompt );          # getting user input (ui)
     if ( !$line ) { $line = ''; }
     $line =~ s/^\s*//; $line =~ s/\s*$//;                   # strip blanks
     if ( $line eq 'q' || $line eq 'exit' ) {
-        goingout( 0 , 1 );     # bye
+        goingout( 0 , 1 );                                  # bye
     }
     system("task $line");
 }   # -------------------------------------------------------------------------- Main Loop
