@@ -75,7 +75,8 @@ my $line   = '';
 my $prompt = 'tsh> ';
 print("\n");                                                # blank line
 while( 1 ) {                                                # forever
-    $line = $term->get_reply( prompt => $prompt );          # getting user input (ui)
+#    $line = $term->get_reply( prompt => $prompt );          # error: needs up arrow twice
+    $line = $term->readline($prompt);                       # getting user input (ui)
     if ( !$line ) { $line = ''; }
     $line =~ s/^\s*//; $line =~ s/\s*$//;                   # strip blanks
     if ( $line eq 'q' || $line eq 'exit' ) {
