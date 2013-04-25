@@ -36,7 +36,7 @@ binmode( STDOUT, ":utf8" );    # or use open ":utf8", ":std";
 #use Term::ANSIColor;        # Color screen output using ANSI escape sequences
 use Term::ReadLine;         # Perl interface to various readline packages.
 use Term::ReadLine::Gnu;    # Perl extension for the GNU Readline/History Library.
-use Term::UI;               # Term::ReadLine UI made easy
+#use Term::UI;               # Term::ReadLine UI made easy
                             #
 # use Term::ReadKey;        # MSWindows?
 
@@ -58,7 +58,7 @@ sub goingout {
         my $m = $_ % 60; $_ /= 60; $m = ($m == 0) ? "" : $m."m " ;
         my $h = $_ % 24; $_ /= 24; $h = ($h == 0) ? "" : $h."h " ;
         my $d = $_;                $d = ($d == 0) ? "" : $d."d " ;
-        print ( $STRING_MSG_TIM.$d.$h.$m.$s."s $STRING_MSG_BYE\n" );
+        print ( $STRING_MSG_TIM.$d.$h.$m.$s."s$STRING_MSG_BYE\n" );
     }
     exit( $retval );
 }
@@ -71,9 +71,16 @@ $term->ornaments(0);                 # disable prompt default styling (underline
 #print "Features supported by ",$term->ReadLine,"\n";
 #foreach (sort keys %features) { print "\t$_ => \t$features{$_}\n"; }; exit 0;
 
+# ---------------------------------------------------------------------- Parsing arguments
+if ( scalar( @ARGV ) != 0 ) {
+    my $args = join( ' ' , @ARGV );                        # rest of the line
+    system("task $args");
+}
+
 my $line   = '';
 my $prompt = 'tsh> ';
 print("\n");                                                # blank line
+# ------------------------------------------------------------------------------ Main Loop
 while( 1 ) {                                                # forever
 #    $line = $term->get_reply( prompt => $prompt );          # error: needs up arrow twice
     $line = $term->readline($prompt);                       # getting user input (ui)
