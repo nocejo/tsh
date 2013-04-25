@@ -33,39 +33,17 @@ use warnings;
 use utf8;
 binmode( STDOUT, ":utf8" );    # or use open ":utf8", ":std";
 
-#use Term::ANSIColor;        # Color screen output using ANSI escape sequences
 use Term::ReadLine;         # Perl interface to various readline packages.
 use Term::ReadLine::Gnu;    # Perl extension for the GNU Readline/History Library.
 #use Term::UI;               # Term::ReadLine UI made easy
-                            #
-# use Term::ReadKey;        # MSWindows?
 
 my $STRING_MSG_TIM  = "Running for ";
-my $STRING_MSG_BYE  = ". Bye.";
 
 my $intime = time();                                                  # Record time
 
-# ----------------------------------------------------------------------------- goingout()
-# goingout( $msg , $retval , $showtime );  does not return, exit function.
-# -----------------------------------------------------------------------------
-sub goingout {
-    use integer;
-    my $retval = shift; my $showtime = shift;
-
-    if ( $showtime == 1 ) {
-        $_ = time() - $intime;
-        my $s = $_ % 60; $_ /= 60;
-        my $m = $_ % 60; $_ /= 60; $m = ($m == 0) ? "" : $m."m " ;
-        my $h = $_ % 24; $_ /= 24; $h = ($h == 0) ? "" : $h."h " ;
-        my $d = $_;                $d = ($d == 0) ? "" : $d."d " ;
-        print ( $STRING_MSG_TIM.$d.$h.$m.$s."s$STRING_MSG_BYE\n" );
-    }
-    exit( $retval );
-}
-
 # ------------------------------------------------------------------ Term::Readline object
-my $term = Term::ReadLine->new('');
-$term->ornaments(0);                 # disable prompt default styling (underline)
+my  $term = Term::ReadLine->new('');
+    $term->ornaments(0);                 # disable prompt default styling (underline)
 
 #my %features = %{$term->Features};
 #print "Features supported by ",$term->ReadLine,"\n";
@@ -86,8 +64,15 @@ while( 1 ) {                                                # forever
     $line = $term->readline($prompt);                       # getting user input (ui)
     if ( !$line ) { $line = ''; }
     $line =~ s/^\s*//; $line =~ s/\s*$//;                   # strip blanks
-    if ( $line eq 'q' || $line eq 'exit' ) {
-        goingout( 0 , 1 );                                  # bye
+    if ( $line eq 'q' || $line eq 'exit' || $line eq 'quit' ) {
+        use integer;
+        $_ = time() - $intime;
+        my $s = $_ % 60; $_ /= 60;
+        my $m = $_ % 60; $_ /= 60; $m = ($m == 0) ? "" : $m."m " ;
+        my $h = $_ % 24; $_ /= 24; $h = ($h == 0) ? "" : $h."h " ;
+        my $d = $_;                $d = ($d == 0) ? "" : $d."d " ;
+        print ( $STRING_MSG_TIM.$d.$h.$m.$s."s\n" );
+        exit( 0 );
     }
     system("task $line");
 }   # -------------------------------------------------------------------------- Main Loop
