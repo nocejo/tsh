@@ -42,6 +42,11 @@ my $showtime        = "on" ;                               # flag: shows time at
 
 my $intime = time();                                                  # Record time
 
+my  %shortcuts = (
+        'r' => 'trev' ,
+        'l' => 'tg'   ,
+    );
+
 # ------------------------------------------------------------------ Term::Readline object
 my  $term = Term::ReadLine->new('');
     $term->ornaments(0);                 # disable prompt default styling (underline)
@@ -69,7 +74,18 @@ while( 1 ) {                                                # forever
     if ( $line eq 'bye' || $line eq 'exit'  || $line eq 'q' || $line eq 'quit' ) {
         goingout( '' , 0 , $showtime ) ;                   # bye
     }
-    system("task $line");
+    if ( $line =~ /^\:(\w*)\s*(.*)/ ) {                      # shortcut/command requested
+        my $short = $1 ;
+        my $args  = $2 ;
+        foreach my $key ( keys( %shortcuts ) ) {
+            if( $short eq $key ) {
+                system( "$shortcuts{ $key } $args" ) ;
+            }
+        }
+    }
+    else {
+        system("task $line") ;
+    }
 }
 
 # ----------------------------------------------------------------------------- goingout()
