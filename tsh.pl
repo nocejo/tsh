@@ -63,8 +63,9 @@ print("\n");                                                # blank line
 while( 1 ) {                                                # forever
 #    $line = $term->get_reply( prompt => $prompt );          # error: needs up arrow twice
     $line = $term->readline($prompt);                       # getting user input (ui)
-    if ( !$line ) { $line = ''; }
+    if ( !$line ) { next ; }                                # no entry, try again
     $line =~ s/^\s*//; $line =~ s/\s*$//;                   # strip blanks
+    if ( $line eq "" ) { next ; } ;                         # blank entry, try again
     if ( $line eq 'bye' || $line eq 'exit'  || $line eq 'q' || $line eq 'quit' ) {
         goingout( '' , 0 , $showtime ) ;                   # bye
     }
