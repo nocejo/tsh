@@ -38,6 +38,7 @@ use Term::ReadLine::Gnu;    # Perl extension for the GNU Readline/History Librar
 #use Term::UI;               # Term::ReadLine UI made easy
 
 my $STRING_MSG_TIM  = "Running for ";
+my $showtime        = "on" ;                               # flag: shows time at exit
 
 my $intime = time();                                                  # Record time
 
@@ -64,17 +65,30 @@ while( 1 ) {                                                # forever
     $line = $term->readline($prompt);                       # getting user input (ui)
     if ( !$line ) { $line = ''; }
     $line =~ s/^\s*//; $line =~ s/\s*$//;                   # strip blanks
-    if ( $line eq 'bye' || $line eq 'q' || $line eq 'quit' || $line eq 'exit' ) {
-        use integer;
+    if ( $line eq 'bye' || $line eq 'exit'  || $line eq 'q' || $line eq 'quit' ) {
+        goingout( '' , 0 , $showtime ) ;                   # bye
+    }
+    system("task $line");
+}
+
+# ----------------------------------------------------------------------------- goingout()
+# goingout( $msg , $retval , $showtime );  does not return, exit function.
+# -----------------------------------------------------------------------------
+sub goingout {
+    use integer;
+    my $msg = shift; my $retval = shift; my $showtime = shift;
+
+    print( $msg );
+    if ( $showtime eq "on" ) {
         $_ = time() - $intime;
         my $s = $_ % 60; $_ /= 60;
         my $m = $_ % 60; $_ /= 60; $m = ($m == 0) ? "" : $m."m " ;
         my $h = $_ % 24; $_ /= 24; $h = ($h == 0) ? "" : $h."h " ;
         my $d = $_;                $d = ($d == 0) ? "" : $d."d " ;
         print ( $STRING_MSG_TIM.$d.$h.$m.$s."s\n" );
-        exit( 0 );
     }
-    system("task $line");
-}   # -------------------------------------------------------------------------- Main Loop
+    exit( $retval );
+}
 __END__
+# -------------------------------------------------------------------------------- __END__
 
