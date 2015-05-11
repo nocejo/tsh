@@ -64,7 +64,7 @@ while( 1 ) {                                                # forever
     $line = $term->readline($prompt);                       # getting user input (ui)
     if ( !$line ) { $line = ''; }
     $line =~ s/^\s*//; $line =~ s/\s*$//;                   # strip blanks
-    if ( $line eq 'q' || $line eq 'exit' || $line eq 'quit' ) {
+    if ( $line eq 'bye' || $line eq 'q' || $line eq 'quit' || $line eq 'exit' ) {
         use integer;
         $_ = time() - $intime;
         my $s = $_ % 60; $_ /= 60;
