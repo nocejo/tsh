@@ -43,8 +43,10 @@ my $showtime        = "on" ;                               # flag: shows time at
 my $intime = time();                                                  # Record time
 
 my  %shortcuts = (
-        'r' => 'trev' ,
-        'l' => 'tg'   ,
+        'r'  => 'trev' ,
+        'l'  => 'tg'   ,
+        'u'  => 'u'    ,                                   # unison
+        'uu' => 'uu'   ,                                   # unattended unison
     );
 
 # ------------------------------------------------------------------ Term::Readline object
