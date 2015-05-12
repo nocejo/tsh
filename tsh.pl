@@ -66,6 +66,7 @@ my $prompt = 'tsh> ';
 print("\n");                                                # blank line
 # ------------------------------------------------------------------------------ Main Loop
 while( 1 ) {                                                # forever
+    my $FLAG_SHCUT = 0 ;                                   # flag: shortcut found (1/0)
 #    $line = $term->get_reply( prompt => $prompt );          # error: needs up arrow twice
     $line = $term->readline($prompt);                       # getting user input (ui)
     if ( !$line ) { next ; }                                # no entry, try again
@@ -75,17 +76,21 @@ while( 1 ) {                                                # forever
         goingout( '' , 0 , $showtime ) ;                   # bye
     }
     if ( $line =~ /^\:(\w*)\s*(.*)/ ) {                      # shortcut/command requested
-        my $short = $1 ;
-        my $args  = $2 ;
+        my $short   = $1 ;
+        my $args    = $2 ;
+        $FLAG_SHCUT = 0  ;
         foreach my $key ( keys( %shortcuts ) ) {
             if( $short eq $key ) {
                 system( "$shortcuts{ $key } $args" ) ;
+                $FLAG_SHCUT = 1 ;                          # shortcut found
+                last ;
             }
         }
     }
-    else {
-        system("task $line") ;
+    if ( $FLAG_SHCUT == 1 ) {
+        next ;
     }
+    system("task $line") ;
 }
 
 # ----------------------------------------------------------------------------- goingout()
