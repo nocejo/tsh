@@ -44,7 +44,8 @@ my $intime = time();                                                  # Record t
 
 my  %shortcuts = (
         'r'  => 'trev' ,
-        'l'  => 'tg'   ,
+        'rt' => 'trev tod' ,
+        'l'  => 'tland',
         'u'  => 'u'    ,                                   # unison
         'uu' => 'uu'   ,                                   # unattended unison
     );
